@@ -2230,14 +2230,14 @@ main section h2, .endcard section h2 { text-wrap: balance; }
 /* Mobile: Results and Our team pin, vertical scroll slides the cards sideways */
 @media (max-width: 899px) {
   .stories { height: var(--stories-h, auto); box-sizing: border-box; }
-  .stories__pin { position: sticky; top: max(0px, calc((100vh - var(--pin-h, 100vh)) / 2)); overflow: hidden; }
+  .stories__pin { position: sticky; top: max(0px, calc((100svh - var(--pin-h, 100svh)) / 2)); overflow: hidden; }
   .stories .track { overflow: visible; scroll-snap-type: none; cursor: default; will-change: transform; }
   .stories .scard { height: clamp(340px, 52vh, 420px); }
   .stories__head { justify-content: center; }
 }
 @media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
   .team.is-pinned { height: var(--team-h, auto); box-sizing: border-box; }
-  .team.is-pinned .team__pin { position: sticky; top: max(0px, calc((100vh - var(--pin-h, 100vh)) / 2)); overflow: hidden; }
+  .team.is-pinned .team__pin { position: sticky; top: max(0px, calc((100svh - var(--pin-h, 100svh)) / 2)); overflow: hidden; }
   .team.is-pinned .people { overflow: visible; scroll-snap-type: none; will-change: transform; }
 }
 

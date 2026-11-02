@@ -625,7 +625,9 @@
       track.scrollBy({ left: stepW() * dir, behavior: RM ? 'auto' : 'smooth' });
     }));
     window.addEventListener('scroll', moveStories, { passive: true });
-    window.addEventListener('resize', sizeStories);
+    // Only re-measure when the width changes; mobile address bars change the height while scrolling
+    let sW = window.innerWidth;
+    window.addEventListener('resize', () => { if (window.innerWidth === sW) return; sW = window.innerWidth; sizeStories(); });
     window.addEventListener('load', sizeStories);
     sizeStories();
     track.addEventListener('scroll', updArrows, { passive: true });
@@ -666,7 +668,8 @@
       moveTeam();
     };
     window.addEventListener('scroll', moveTeam, { passive: true });
-    window.addEventListener('resize', sizeTeam);
+    let tW = window.innerWidth;
+    window.addEventListener('resize', () => { if (window.innerWidth === tW) return; tW = window.innerWidth; sizeTeam(); });
     window.addEventListener('load', sizeTeam);
     sizeTeam();
   }
@@ -749,11 +752,13 @@
 
   /* End card: sides pull in and corners round as its bottom edge rises into view */
   const endcard = $('.endcard');
+  let lastInset = '';
   const updEnd = () => {
     if (!endcard) return;
     const b = endcard.getBoundingClientRect().bottom, vh = window.innerHeight;
     const p = RM ? 1 : clamp((vh * 1.15 - b) / (vh * 0.8));
-    endcard.style.setProperty('--inset', `${(p * (isDesk() ? 32 : 12)).toFixed(1)}px`);
+    const v = `${(p * (isDesk() ? 32 : 12)).toFixed(1)}px`;
+    if (v !== lastInset) { lastInset = v; endcard.style.setProperty('--inset', v); }
   };
   window.addEventListener('scroll', updEnd, { passive: true });
   window.addEventListener('resize', updEnd);
