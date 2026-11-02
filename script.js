@@ -594,7 +594,7 @@
     // Desktop: the section pins and vertical scroll moves the cards sideways (1px down = 1px across)
     const sec = $('.stories');
     let sDist = 0, sX = 0;
-    const pinned = () => isDesk() && !RM;
+    const pinned = () => !RM;
     const sizeStories = () => {
       if (!pinned()) { sec.style.removeProperty('--stories-h'); track.style.transform = ''; return; }
       track.style.transform = '';
@@ -640,6 +640,35 @@
     });
     window.addEventListener('pointerup', () => { if (drag && drag.moved) track.classList.remove('is-drag'); drag = null; });
     track.addEventListener('keydown', (e) => { if (!hasArrows) return; if (e.key === 'ArrowRight') next.click(); if (e.key === 'ArrowLeft') prev.click(); });
+  }
+
+  /* Our team on mobile: the section pins and vertical scroll slides the cards sideways */
+  const tSec = $('.team'), tPin = $('.team__pin'), tRow = $('.people');
+  if (tSec && tPin && tRow) {
+    let tDist = 0;
+    const tOn = () => !isDesk() && !RM;
+    const moveTeam = () => {
+      if (!tOn()) return;
+      const stickTop = parseFloat(getComputedStyle(tPin).top) || 0;
+      const padTop = parseFloat(getComputedStyle(tSec).paddingTop) || 0;
+      const x = clamp(stickTop - (tSec.getBoundingClientRect().top + padTop), 0, tDist);
+      tRow.style.transform = `translate3d(${-x}px,0,0)`;
+    };
+    const sizeTeam = () => {
+      tSec.classList.toggle('is-pinned', tOn());
+      tRow.style.transform = '';
+      if (!tOn()) { tSec.style.removeProperty('--team-h'); return; }
+      tDist = Math.max(0, tRow.scrollWidth - tRow.clientWidth + 20);
+      const pinH = tPin.offsetHeight;
+      tSec.style.setProperty('--pin-h', `${pinH}px`);
+      const padTop = parseFloat(getComputedStyle(tSec).paddingTop) || 0;
+      tSec.style.setProperty('--team-h', `${padTop + pinH + tDist}px`);
+      moveTeam();
+    };
+    window.addEventListener('scroll', moveTeam, { passive: true });
+    window.addEventListener('resize', sizeTeam);
+    window.addEventListener('load', sizeTeam);
+    sizeTeam();
   }
 
   /* Footer line labels: each one types a short tagline, holds, erases, then the next */

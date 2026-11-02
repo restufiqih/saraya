@@ -2208,6 +2208,45 @@ main section h2, .endcard section h2 { text-wrap: balance; }
 
 .scard--person { width: min(56vw, 230px) !important; }
 
+/* Mobile: team as a swipeable row, quote card with photo on top */
+@media (max-width: 719px) {
+  .people { grid-template-columns: none !important; grid-auto-flow: column; grid-auto-columns: 68%; gap: 14px !important; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: 0; padding: 0 20px 4px; scroll-padding-inline: 20px; scrollbar-width: none; }
+  .people::-webkit-scrollbar { display: none; }
+  .people .person { max-width: none; scroll-snap-align: start; }
+  .person__img { aspect-ratio: 4 / 5 !important; margin-bottom: 16px; border-radius: 18px !important; }
+  .person__img .person__color { opacity: 1; }
+  .person h3 { font-size: 1.3rem; }
+  .person .role { font-size: .9rem; margin-top: 4px; }
+  .people .person__links { padding-top: 14px; gap: 14px; }
+  .person__links svg { width: 18px; height: 18px; }
+}
+@media (max-width: 899px) {
+  .pc--quote { grid-template-columns: 1fr !important; gap: 22px; padding: 16px 16px 26px; }
+  .pc--quote img { order: -1; width: 100% !important; height: auto !important; aspect-ratio: 4 / 3 !important; object-position: 50% 18%; border-radius: 14px; justify-self: stretch; }
+  .pc--quote .pc__body { padding: 0 8px; }
+  .pc--quote blockquote { font-size: 1.4rem; margin-bottom: 18px; }
+}
+
+/* Mobile: Results and Our team pin, vertical scroll slides the cards sideways */
+@media (max-width: 899px) {
+  .stories { height: var(--stories-h, auto); box-sizing: border-box; }
+  .stories__pin { position: sticky; top: max(0px, calc((100vh - var(--pin-h, 100vh)) / 2)); overflow: hidden; }
+  .stories .track { overflow: visible; scroll-snap-type: none; cursor: default; will-change: transform; }
+  .stories .scard { height: clamp(340px, 52vh, 420px); }
+  .stories__head { justify-content: center; }
+}
+@media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
+  .team.is-pinned { height: var(--team-h, auto); box-sizing: border-box; }
+  .team.is-pinned .team__pin { position: sticky; top: max(0px, calc((100vh - var(--pin-h, 100vh)) / 2)); overflow: hidden; }
+  .team.is-pinned .people { overflow: visible; scroll-snap-type: none; will-change: transform; }
+}
+
+/* Why Saraya on mobile: no dividers, spacing only */
+@media (max-width: 899px) {
+  .why2 { border-top: 0 !important; gap: 56px; margin-top: 40px; }
+  .wy { border: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+}
+
 /* ---------- Reveal ---------- */
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 1s var(--ease), transform 1.1s var(--ease); }
 .js .reveal.is-in { opacity: 1; transform: none; }
