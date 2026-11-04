@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..600&family=Inter:wght@400..600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=94ac3a5" />
+  <link rel="stylesheet" href="styles.css?v=20261104o" />
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -31,10 +31,11 @@
     <div class="nav__group">
       <nav class="nav__links" aria-label="Main">
         <a href="#solutions">Solutions</a>
+        <a href="#about">About</a>
         <a href="#approach">Approach</a>
         <a href="#stories">Results</a>
-        <a href="#about">About</a>
         <a href="#team">Team</a>
+        <a href="#faq">FAQ</a>
       </nav>
       <button class="nav__toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
     </div>
@@ -43,10 +44,11 @@
     </div>
     <div class="mobile-menu" id="mobile-menu" hidden>
       <a href="#solutions">Solutions</a>
+      <a href="#about">About</a>
       <a href="#approach">Approach</a>
       <a href="#stories">Results</a>
-      <a href="#about">About</a>
       <a href="#team">Team</a>
+      <a href="#faq">FAQ</a>
       <button class="pbtn pbtn--light pbtn--sm mobile-menu__cta" data-open-form>Get in touch</button>
     </div>
   </header>
@@ -82,19 +84,43 @@
       </div>
     </section>
 
-    <!-- SOLUTIONS: scroll-driven tabs -->
+    <!-- SOLUTIONS: sticky intro on the left, stacking cards on the right -->
     <section class="solutions" id="solutions">
-      <div class="wrap center">
-        <p class="eyebrow reveal">What we do</p>
-        <h2 class="sol-title">From boardroom to bedside, <span class="soft">we work where care happens.</span></h2>
+      <div class="wrap sol2 sol3">
+        <div class="sol3__head center">
+          <h2 class="sol-title">Four ways we help, <span class="soft">from boardroom to bedside.</span></h2>
+        </div>
+        <div class="sol3__cols">
+        <div class="sol2__l center">
+          <div class="sol2__stick">
         <div class="who reveal">
           <div class="who__stack" aria-hidden="true"><span style="--b:#0A6E7A" title="Hospital directors"><svg viewBox="0 0 24 24"><path d="M4 21V7l8-4 8 4v14"/><path d="M12 8v6M9 11h6M9 21v-3h6v3"/></svg></span><span style="--b:#C2571A" title="Medical leaders"><svg viewBox="0 0 24 24"><path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v3a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="12" r="2"/></svg></span><span style="--b:#6B47C2" title="Clinic owners"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span><span style="--b:#2560C8" title="Investors"><svg viewBox="0 0 24 24"><path d="M4 17l5-5 4 3 7-7"/><path d="M15 8h5v5"/></svg></span><span style="--b:#1F2D30" title="Boards"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="16.5" cy="10" r="2.5"/><path d="M3.5 19c.8-3 3-4.5 5.5-4.5s4.7 1.5 5.5 4.5M15 14.6c2.3-.3 4.3 1 5 3.9"/></svg></span></div>
-          <p>Built for <b>hospital directors</b>, <b>medical leaders</b>, <b>clinic owners</b>, <b>healthcare investors</b> and <b>boards</b>.</p>
+          <p>Built for <b>healthcare leaders</b> and <b>investors</b>.</p>
         </div>
-      </div>
+            <div class="copy">
+              <div class="tabs2" role="tablist" aria-label="What we do">
+              <div class="tab2">
+                <button class="word is-active" role="tab" aria-selected="true"><span class="word__n">01</span>Align</button>
+                <div class="desc is-active"><p>Owners, management and clinicians working from the same numbers, with dashboards and board reports everyone trusts.</p></div>
+              </div>
+              <div class="tab2">
+                <button class="word" role="tab" aria-selected="false"><span class="word__n">02</span>Expand</button>
+                <div class="desc"><p>Business cases and launch plans for new service lines, centers of excellence and new sites.</p></div>
+              </div>
+              <div class="tab2">
+                <button class="word" role="tab" aria-selected="false"><span class="word__n">03</span>Streamline</button>
+                <div class="desc"><p>Booking, admission, care and follow-up redesigned, so every step is shorter and clearer for patients and staff.</p></div>
+              </div>
+              <div class="tab2">
+                <button class="word" role="tab" aria-selected="false"><span class="word__n">04</span>Lead</button>
+                <div class="desc"><p>Hiring medical and managerial leaders, building skills and shaping a culture that holds after we step back.</p></div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div class="steps" style="--n:4;--acc:#0A6E7A">
-        <div class="steps__sticky wrap">
+        <div class="steps sol2__r" style="--n:4;--acc:#0A6E7A">
           <div class="stage">
             <!-- 1 Align -->
             <article class="panel is-active" style="--acc:#0A6E7A">
@@ -156,114 +182,137 @@
               <div class="panel__m"><p>Medical and managerial leaders hired, coached and set up to last.</p></div>
             </article>
           </div>
+        </div>
+      </div>
+      </div>
+    </section>
 
-          <div class="copy">
-            <div class="words" role="tablist" aria-label="What we do">
-              <button class="word is-active" role="tab" aria-selected="true">Align</button>
-              <button class="word" role="tab" aria-selected="false">Expand</button>
-              <button class="word" role="tab" aria-selected="false">Streamline</button>
-              <button class="word" role="tab" aria-selected="false">Lead</button>
+    <!-- WHO WE ARE: statement, a bridge between what we do and why us -->
+    <section class="about" id="about">
+      <div class="wrap about__story">
+        <p class="statement" data-scrub>We don't hand over a report and leave. We work on the <span class="kw">ward</span>, beside <span class="kw">your teams</span>, until <span class="kw">better care</span> is simply how your <span class="kw">hospital</span> <span class="ipill ipill--hosp ipill--pop" role="img" aria-label="Hospital building with its sign"><span class="pop__bg"><img src="media/statement-hosp-bg.jpg" alt="" /></span><span class="pop__cut"><img src="media/statement-hosp-cutout.png" alt="" /></span></span> runs.</p>
+      </div>
+    </section>
+
+    <!-- WHAT SETS US APART -->
+    <section class="apart" id="apart">
+      <div class="wrap apart__grid">
+        <div class="apart__head center reveal">
+          <h2>Why hospitals <span class="soft">choose Saraya.</span></h2>
+          <p>We judge our work by what still runs a year after we leave.</p>
+        </div>
+        <div class="why2">
+          <article class="wy reveal">
+            <span class="wy__ic" aria-hidden="true"><svg viewBox="0 0 40 40"><rect class="gh" x="15" y="4" width="18" height="25" rx="2.5" transform="rotate(12 24 16.5)"/><rect class="mn" x="7" y="10" width="18" height="25" rx="2.5"/><path class="ln" d="M16 15.5v6M13 18.5h6M13.5 35v-5h5v5"/></svg></span>
+            <h3>Grounded in operations</h3>
+            <p>We have run wards, clinics and budgets ourselves, so our advice holds up on a real shift.</p>
+            <div class="wy__demo wy__list" data-lenis-prevent aria-label="Recent operations work" tabindex="0"><ul class="wy__track"><li><span>Outpatient flow redesign</span><em>Surabaya</em></li><li><span>Bed management</span><em>Jakarta</em></li><li><span>Claims rework</span><em>Bandung</em></li><li><span>Night-shift rostering</span><em>Makassar</em></li><li><span>ER triage setup</span><em>Medan</em></li><li><span>Pharmacy stock control</span><em>Semarang</em></li><li><span>Discharge planning</span><em>Denpasar</em></li><li><span>Theatre scheduling</span><em>Yogyakarta</em></li><li><span>Patient call centre</span><em>Bekasi</em></li><li><span>Outpatient flow redesign</span><em>Surabaya</em></li><li><span>Bed management</span><em>Jakarta</em></li><li><span>Claims rework</span><em>Bandung</em></li><li><span>Night-shift rostering</span><em>Makassar</em></li><li><span>ER triage setup</span><em>Medan</em></li><li><span>Pharmacy stock control</span><em>Semarang</em></li><li><span>Discharge planning</span><em>Denpasar</em></li><li><span>Theatre scheduling</span><em>Yogyakarta</em></li><li><span>Patient call centre</span><em>Bekasi</em></li></ul></div>
+          </article>
+          <article class="wy reveal">
+            <span class="wy__ic" aria-hidden="true"><svg viewBox="0 0 40 40"><path class="gh" d="M8 25.5 20 32.5 32 25.5"/><path class="gh" d="M8 20.5 20 27.5 32 20.5"/><path class="mn" d="M20 7 32 14 20 21 8 14Z"/></svg></span>
+            <h3>Tailored to you</h3>
+            <p>No templates. Each plan starts from your patients, your people and your numbers.</p>
+            <div class="wy__demo wy__tilewrap">
+              <ul class="wy__tiles"><li><button type="button" data-desc="Cath lab readiness, chest-pain pathways and referral networks that bring cardiac cases in early.">Cardiology</button></li><li><button type="button" data-desc="Birthing suites, antenatal programs and NICU links sized to the families you serve.">Maternity</button></li><li><button type="button" data-desc="Day chemo units, tumor boards and patient navigation from diagnosis to follow-up.">Oncology</button></li><li><button type="button" data-desc="Child-friendly outpatient flow, vaccination programs and pediatric emergency protocols.">Pediatrics</button></li><li><button type="button" data-desc="Theatre scheduling and same-day discharge, so more cases finish before evening.">Day surgery</button></li><li><button type="button" data-desc="Triage, door-to-doctor times and ambulance handover that hold up on a busy night.">Emergency</button></li></ul>
+              <div class="wy__pop" role="dialog" aria-modal="false" aria-labelledby="wyPopT" hidden>
+                <h4 id="wyPopT"></h4>
+                <p></p>
+              </div>
             </div>
-            <div class="descs">
-              <div class="desc is-active"><p>Owners, management and clinicians working from the same numbers, with dashboards and board reports everyone trusts.</p></div>
-              <div class="desc"><p>Business cases and launch plans for new service lines, centers of excellence and new sites.</p></div>
-              <div class="desc"><p>Booking, admission, care and follow-up redesigned, so every step is shorter and clearer for patients and staff.</p></div>
-              <div class="desc"><p>Hiring medical and managerial leaders, building skills and shaping a culture that holds after we step back.</p></div>
+          </article>
+          <article class="wy reveal">
+            <span class="wy__ic" aria-hidden="true"><svg viewBox="0 0 40 40"><path class="gh" d="M21.5 16.5h8a5 5 0 0 1 5 5v4a5 5 0 0 1-3 4.6V34l-3.8-3.5h-6.2a5 5 0 0 1-5-5v-4a5 5 0 0 1 5-5Z"/><path class="mn" d="M16.5 6c7 0 10.5 4 10.5 8.6s-3.5 8.6-10.5 8.6c-1.5 0-2.9-.2-4.1-.6L8 25l1.1-4.3C7.2 19.2 6 17 6 14.6 6 10 9.5 6 16.5 6Z"/></svg></span>
+            <h3>Global standards, local fit</h3>
+            <p>We bring proven international practice and adapt it to how care works in Indonesia.</p>
+            <div class="wy__demo wy__chat" aria-hidden="true">
+              <p class="bub bub--in">We're opening a cardiac center in Makassar. Which JCI steps matter first?</p>
+              <p class="bub bub--out">Start with the patient-safety goals, sized to your staffing.</p>
+              <p class="bub bub--in">Can we keep our BPJS referral flow as it is?</p>
+              <p class="bub bub--out">Yes. We fit the new steps into it, so referrals and claims keep moving.</p>
+              <p class="bub bub--in">How soon can we be survey-ready?</p>
+              <p class="bub bub--out">We'll map a 12-week plan with your team this month.</p>
+              <p class="bub bub--typing"><i></i><i></i><i></i></p>
             </div>
-            <div class="progress"><span></span></div>
-          </div>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- HOW WE WORK -->
-    <section class="approach" id="approach">
-      <div class="wrap center">
-        <p class="eyebrow reveal">How we work</p>
-        <h2 class="reveal">Four stages, <span class="soft">one team beside yours.</span></h2>
-        <p class="sub reveal">Every engagement follows the same rhythm, scaled to your size and pace.</p>
+    <section class="approach clog" id="approach">
+      <div class="grad grad--v1" aria-hidden="true"><span class="grad__wave"></span></div>
+      <div class="wrap cl__grid">
+        <div class="cl__l">
+          <div class="cl__stick">
+            <h2 class="reveal">How we work. <span class="soft">Four clear stages.</span></h2>
+            <p class="cl__sub reveal">Every engagement follows the same rhythm,<br class="br-d"> scaled to your size and pace.</p>
+          </div>
+        </div>
+        <ol class="cl__list">
+          <li class="cl__track" aria-hidden="true"><span></span></li>
+          <li class="cl__item is-on">
+            <span class="cl__dot" aria-hidden="true"></span>
+            <h3>Diagnose</h3>
+            <p>We walk the floor, read the numbers and talk to staff and patients to find what really holds you back.</p>
+          </li>
+          <li class="cl__item">
+            <span class="cl__dot" aria-hidden="true"></span>
+            <h3>Design</h3>
+            <p>Together we set priorities, targets and a plan that fits your budget and your people.</p>
+          </li>
+          <li class="cl__item">
+            <span class="cl__dot" aria-hidden="true"></span>
+            <h3>Deliver</h3>
+            <p>Our team works on site with yours: new workflows, tools and training, put into daily use.</p>
+          </li>
+          <li class="cl__item">
+            <span class="cl__dot" aria-hidden="true"></span>
+            <h3>Sustain</h3>
+            <p>We track results, fix what slips and hand over fully once the gains hold.</p>
+          </li>
+        </ol>
+        <div class="cl__foot reveal">
+          <p><b>Ready to start?</b> Every program begins with a short diagnosis on site.</p>
+          <button class="pbtn pbtn--light pbtn--sm cl__cta" data-open-form>Book a consultation</button>
+        </div>
       </div>
-      <ol class="wrap flow">
-        <li class="flow__line" aria-hidden="true"><span></span></li>
-        <li class="flow__step">
-          <span class="flow__n">01</span>
-          <h3>Diagnose</h3>
-          <p>We walk the floor, read the numbers and talk to staff and patients to find what really holds you back.</p>
-        </li>
-        <li class="flow__step">
-          <span class="flow__n">02</span>
-          <h3>Design</h3>
-          <p>Together we set priorities, targets and a plan that fits your budget and your people.</p>
-        </li>
-        <li class="flow__step">
-          <span class="flow__n">03</span>
-          <h3>Deliver</h3>
-          <p>Our team works on site with yours: new workflows, tools and training, put into daily use.</p>
-        </li>
-        <li class="flow__step">
-          <span class="flow__n">04</span>
-          <h3>Sustain</h3>
-          <p>We track results, fix what slips and hand over fully once the gains hold.</p>
-        </li>
-      </ol>
     </section>
 
     <!-- STORIES -->
-    <section class="stories" id="stories">
-      <div class="stories__pin">
-      <div class="wrap center stories__head">
-        <p class="eyebrow reveal">Results</p>
-        <h2 class="reveal">What changed <span class="soft">for our partners.</span></h2>
-      </div>
-      <div class="track" tabindex="0" aria-label="Stories, scroll sideways">
-        <article class="scard scard--quote">
-          <div class="grad" aria-hidden="true"><span class="grad__wave"></span></div>
-          <span class="scard__brand"><span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="10.5" r="4.5"/><circle cx="16" cy="21.5" r="4.5"/><circle cx="10.5" cy="16" r="4.5"/><circle cx="21.5" cy="16" r="4.5"/></svg></span><span>Saraya Partners</span></span>
-          <blockquote>“We don't hand over a slide deck and leave. We sit with your nurses, your finance team and your board until the new model runs on its own.”</blockquote>
-          <p class="scard__who"><b>Bima Wicaksono</b><span>Chief Clinical Officer, Saraya Partners</span></p>
-        </article>
-        <figure class="scard scard--photo scard--person"><img src="media/team-bima-wicaksono.jpg" alt="Portrait of Bima Wicaksono" loading="lazy" /></figure>
-        <article class="scard scard--stat">
-          <span class="scard__tag">Hospital, Surabaya</span>
-          <p class="big">−32%</p>
-          <p class="scard__metric">Outpatient waiting time</p>
-          <p class="scard__ctx">After a full patient-journey redesign at a 220-bed hospital.</p>
-        </article>
-        <figure class="scard scard--photo"><img src="media/results-waiting-room.webp?v=3" alt="Calm outpatient waiting area with a nurse walking past" loading="lazy" /></figure>
-        <article class="scard scard--stat">
-          <span class="scard__tag">Clinic network, Bandung</span>
-          <p class="big">+18 pts</p>
-          <p class="scard__metric">Patient satisfaction (NPS)</p>
-          <p class="scard__ctx">Across six outpatient clinics, within one year.</p>
-        </article>
-        <figure class="scard scard--photo"><img src="media/results-nurse-patient.webp?v=2" alt="Nurse holding an elderly patient's hands in a calm clinic lounge" loading="lazy" /></figure>
-        <article class="scard scard--stat">
-          <span class="scard__tag">Clinic group, Greater Jakarta</span>
-          <p class="big">3 → 9</p>
-          <p class="scard__metric">Clinic locations</p>
-          <p class="scard__ctx">Scaled with a repeatable operating model for a healthcare investor.</p>
-        </article>
-        <article class="scard scard--cta">
-          <span class="scard__tag">Your organization</span>
-          <h3>Facing a similar challenge?</h3>
-          <p class="scard__ctx">Tell us where it hurts. A partner, not a sales rep, replies within two working days.</p>
-          <button class="pbtn pbtn--light pbtn--sm" data-open-form>Talk to us</button>
-        </article>
-      </div>
-      </div>
-    </section>
-
-    <!-- WHO WE ARE: statement -->
-    <section class="about" id="about">
-      <div class="wrap about__story">
-        <p class="statement" data-scrub>We are a hands-on <span class="ipill ipill--hosp ipill--pop" role="img" aria-label="Hospital building with its sign"><span class="pop__bg"><img src="media/statement-hosp-bg.jpg" alt="" /></span><span class="pop__cut"><img src="media/statement-hosp-cutout.png" alt="" /></span></span> operating partner for <span class="kw">hospitals</span>, <span class="kw">clinics</span> and <span class="kw">healthcare investors</span>, building better care across <span class="kw">Indonesia</span>.</p>
+    <section class="stories res3" id="stories" aria-label="Results">
+      <div class="wrap">
+        <div class="res3__stats">
+          <article class="res3__stat">
+            <p class="res3__num">−32%</p>
+            <div class="res3__txt">
+              <h3>Outpatient waiting time</h3>
+              <p class="res3__ctx">After a full patient-journey redesign at a 220-bed hospital.</p>
+            </div>
+            <span class="res3__tag">Hospital, Surabaya</span>
+          </article>
+          <article class="res3__stat">
+            <p class="res3__num">+18 pts</p>
+            <div class="res3__txt">
+              <h3>Patient satisfaction (NPS)</h3>
+              <p class="res3__ctx">Across six outpatient clinics, within one year.</p>
+            </div>
+            <span class="res3__tag">Clinic network, Bandung</span>
+          </article>
+          <article class="res3__stat">
+            <p class="res3__num">3 → 9</p>
+            <div class="res3__txt">
+              <h3>Clinic locations</h3>
+              <p class="res3__ctx">Scaled with a repeatable operating model for a healthcare investor.</p>
+            </div>
+            <span class="res3__tag">Clinic group, Greater Jakarta</span>
+          </article>
+        </div>
       </div>
     </section>
 
     <!-- VISION & MISSION, numbers and quote (doxy-style cards) -->
     <section class="trust" id="proof">
       <div class="wrap center">
-        <p class="eyebrow reveal">Vision &amp; mission</p>
         <h2 class="reveal">Clear on purpose. <span class="soft">Proven on busy wards.</span></h2>
         <p class="sub reveal">Hospitals and clinics in 12 Indonesian cities rely on us to turn plans into daily practice.</p>
       </div>
@@ -299,43 +348,6 @@
       </div>
     </section>
 
-    <!-- WHAT SETS US APART -->
-    <section class="apart" id="apart">
-      <div class="wrap apart__grid">
-        <div class="apart__head center reveal">
-          <p class="eyebrow">Why Saraya</p>
-          <h2>Grounded, tailored <span class="soft">and built to last.</span></h2>
-          <p>We judge our work by what still runs a year after we leave.</p>
-        </div>
-        <div class="why2">
-          <article class="wy reveal">
-            <span class="wy__ic" aria-hidden="true"><svg viewBox="0 0 40 40"><rect class="gh" x="15" y="4" width="18" height="25" rx="2.5" transform="rotate(12 24 16.5)"/><rect class="mn" x="7" y="10" width="18" height="25" rx="2.5"/><path class="ln" d="M16 15.5v6M13 18.5h6M13.5 35v-5h5v5"/></svg></span>
-            <h3>Grounded in operations</h3>
-            <p>We have run wards, clinics and budgets ourselves, so our advice holds up on a real shift.</p>
-            <div class="wy__demo wy__list" aria-hidden="true"><ul class="wy__track"><li><span>Outpatient flow redesign</span><em>Surabaya</em></li><li><span>Bed management</span><em>Jakarta</em></li><li><span>Claims rework</span><em>Bandung</em></li><li><span>Night-shift rostering</span><em>Makassar</em></li><li><span>ER triage setup</span><em>Medan</em></li><li><span>Pharmacy stock control</span><em>Semarang</em></li><li><span>Discharge planning</span><em>Denpasar</em></li><li><span>Theatre scheduling</span><em>Yogyakarta</em></li><li><span>Patient call centre</span><em>Bekasi</em></li><li><span>Outpatient flow redesign</span><em>Surabaya</em></li><li><span>Bed management</span><em>Jakarta</em></li><li><span>Claims rework</span><em>Bandung</em></li><li><span>Night-shift rostering</span><em>Makassar</em></li><li><span>ER triage setup</span><em>Medan</em></li><li><span>Pharmacy stock control</span><em>Semarang</em></li><li><span>Discharge planning</span><em>Denpasar</em></li><li><span>Theatre scheduling</span><em>Yogyakarta</em></li><li><span>Patient call centre</span><em>Bekasi</em></li></ul></div>
-          </article>
-          <article class="wy reveal">
-            <span class="wy__ic" aria-hidden="true"><svg viewBox="0 0 40 40"><path class="gh" d="M8 25.5 20 32.5 32 25.5"/><path class="gh" d="M8 20.5 20 27.5 32 20.5"/><path class="mn" d="M20 7 32 14 20 21 8 14Z"/></svg></span>
-            <h3>Tailored to you</h3>
-            <p>No templates. Each plan starts from your patients, your people and your numbers.</p>
-            <ul class="wy__demo wy__tiles" aria-hidden="true"><li>Cardiology</li><li>Maternity</li><li>Oncology</li><li>Pediatrics</li><li>Day surgery</li><li>Emergency</li></ul>
-          </article>
-          <article class="wy reveal">
-            <span class="wy__ic" aria-hidden="true"><svg viewBox="0 0 40 40"><path class="gh" d="M22.5 17.5h7a5 5 0 0 1 5 5v3.5a5 5 0 0 1-3 4.6V34l-3.6-3h-5.4a5 5 0 0 1-5-5"/><path class="mn" d="M16.5 6c7 0 10.5 4 10.5 8.6s-3.5 8.6-10.5 8.6c-1.5 0-2.9-.2-4.1-.6L8 25l1.1-4.3C7.2 19.2 6 17 6 14.6 6 10 9.5 6 16.5 6Z"/></svg></span>
-            <h3>Global standards, local fit</h3>
-            <p>We bring proven international practice and adapt it to how care works in Indonesia.</p>
-            <div class="wy__demo wy__chat" aria-hidden="true">
-              <p class="bub bub--in">We're opening a cardiac center in Makassar. Which JCI steps matter first?</p>
-              <div class="bub-slot">
-                <p class="bub bub--typing"><i></i><i></i><i></i></p>
-                <p class="bub bub--out">Start with the patient-safety goals, sized to your staffing. We'll map a 12-week plan with your team.</p>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
     <!-- WHAT WE BELIEVE -->
     <section class="feature" aria-label="What we believe" id="belief">
       <div class="feature__bg" aria-hidden="true"><img data-parallax src="media/belief-bg.webp" alt="" loading="lazy" /></div>
@@ -361,8 +373,7 @@
     <section class="team" id="team">
       <div class="team__pin">
       <div class="wrap center">
-        <p class="eyebrow reveal">Our team</p>
-        <h2 class="reveal">Operators first, <span class="soft">advisers second.</span></h2>
+        <h2 class="reveal">Meet the team. <span class="soft">Operators<br />first, advisers second.</span></h2>
         <p class="sub reveal">Our partners have led hospitals, clinic networks and care teams, and still roll up their sleeves.</p>
       </div>
       <div class="wrap people">
@@ -385,10 +396,68 @@
     </div>
     </section>
 
+    <!-- TESTIMONIALS -->
+    <section class="tst" id="testimonials" aria-label="What clients say">
+      <div class="wrap">
+        <div class="tst__grid">
+          <figure class="tst__item reveal">
+            <img class="tst__logo" src="https://upload.wikimedia.org/wikipedia/commons/7/74/Logo_Mayapada_Hospital.png" alt="Mayapada Hospital" style="--lh:38px" loading="lazy" />
+            <blockquote>&ldquo;They sat in our outpatient corridors for two weeks before suggesting anything. The plan they built was one our nurses could actually run.&rdquo;</blockquote>
+            <figcaption><b>Dr. Hendra Wijaya</b><span>Hospital Director, Surabaya</span></figcaption>
+          </figure>
+          <figure class="tst__item reveal">
+            <img class="tst__logo" src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Logo_Primaya_Hospital.png" alt="Primaya Hospital" style="--lh:30px" loading="lazy" />
+            <blockquote>&ldquo;Every clinic now follows the same patient journey. Our satisfaction scores moved within the first two quarters.&rdquo;</blockquote>
+            <figcaption><b>Ratna Kusuma</b><span>Head of Operations, Bandung</span></figcaption>
+          </figure>
+          <figure class="tst__item reveal">
+            <img class="tst__logo" src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Mitra_Keluarga.svg" alt="Mitra Keluarga" style="--lh:38px" loading="lazy" />
+            <blockquote>&ldquo;We went from three locations to nine without losing control. The operating model made each opening faster than the last.&rdquo;</blockquote>
+            <figcaption><b>Michael Tanoto</b><span>Managing Partner, Jakarta</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq faq2" id="faq">
+      <div class="wrap faq2__grid">
+        <div class="faq2__head">
+          <h2 class="reveal">Frequently<br /><span class="soft">asked questions.</span></h2>
+          <p class="faq2__sub reveal">Can't find what you need? Ask us directly. A partner replies within two working days.</p>
+        </div>
+        <div class="faq__list faq2__list reveal">
+            <div class="qa">
+              <button class="qa__q" type="button" aria-expanded="false">How long does a typical engagement last?<span class="qa__ic" aria-hidden="true"></span></button>
+              <div class="qa__a"><div><p>Most programs run 12 to 24 weeks: two to three weeks of diagnosis on site, then design and delivery with your teams. Longer partnerships are agreed one stage at a time.</p></div></div>
+            </div>
+            <div class="qa">
+              <button class="qa__q" type="button" aria-expanded="false">How do you charge for your work?<span class="qa__ic" aria-hidden="true"></span></button>
+              <div class="qa__a"><div><p>A fixed fee for each stage, agreed in writing before work starts. For some programs, part of the fee is tied to results we set together at the start.</p></div></div>
+            </div>
+            <div class="qa">
+              <button class="qa__q" type="button" aria-expanded="false">Do you work outside Jakarta?<span class="qa__ic" aria-hidden="true"></span></button>
+              <div class="qa__a"><div><p>Yes. We work with partners in 12 cities, have offices in Jakarta, Surabaya, Bandung and Makassar, and our teams work on site wherever you are.</p></div></div>
+            </div>
+            <div class="qa">
+              <button class="qa__q" type="button" aria-expanded="false">Will you work with our existing staff and systems?<span class="qa__ic" aria-hidden="true"></span></button>
+              <div class="qa__a"><div><p>Always. We work inside your teams and with the systems you already run, including SATUSEHAT and BPJS workflows, and only suggest new tools when they clearly pay off.</p></div></div>
+            </div>
+            <div class="qa">
+              <button class="qa__q" type="button" aria-expanded="false">How do you handle patient and financial data?<span class="qa__ic" aria-hidden="true"></span></button>
+              <div class="qa__a"><div><p>Under a confidentiality agreement from day one, in line with Indonesia’s Personal Data Protection Law. Patient records stay in your systems.</p></div></div>
+            </div>
+            <div class="qa">
+              <button class="qa__q" type="button" aria-expanded="false">What happens after your team steps back?<span class="qa__ic" aria-hidden="true"></span></button>
+              <div class="qa__a"><div><p>We stay through a sustain stage, tracking the numbers and coaching your people, so the new way of working holds without us.</p></div></div>
+            </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FINAL CTA: white panel resting on the gradient footer -->
     <section class="cta2" id="contact">
       <div class="cta2__panel">
-        <p class="eyebrow reveal">Let's talk</p>
         <h2 class="reveal">Build better care <span class="soft">with us.</span></h2>
         <div class="cta2__actions reveal">
           <button class="pbtn pbtn--light pbtn--sm" data-open-form>Book a consultation</button>
@@ -412,7 +481,7 @@
         <p class="foot__status">Partnering with hospitals in 12 cities</p>
       </div>
       <nav class="foot__cols" aria-label="Footer">
-        <div><h3>Company</h3><a href="#about">About</a><a href="#approach">Approach</a><a href="#stories">Results</a><a href="#team">Team</a></div>
+        <div><h3>Company</h3><a href="#about">About</a><a href="#approach">Approach</a><a href="#stories">Results</a><a href="#team">Team</a><a href="#faq">FAQ</a></div>
         <div><h3>What we do</h3><a href="#solutions">Align</a><a href="#solutions">Expand</a><a href="#solutions">Streamline</a><a href="#solutions">Lead</a></div>
         <div><h3>Offices</h3><span>Jakarta (HQ)</span><span>Surabaya</span><span>Bandung</span><span>Makassar</span></div>
         <div><h3>Connect</h3><button type="button" data-open-form>Contact us</button><a href="mailto:hello@sarayapartners.example">Email</a><a href="#" rel="noopener">LinkedIn</a></div>
@@ -426,7 +495,7 @@
   </div>
 
   <!-- CONSULTATION SHEET -->
-  <dialog class="sheet" id="consult" aria-labelledby="consult-title">
+  <dialog class="sheet" id="consult" aria-labelledby="consult-title" data-lenis-prevent>
     <form class="sheet__form" id="contact-form" novalidate>
       <button type="button" class="sheet__close" data-close-form aria-label="Close">×</button>
       <span class="chip">Free 45-minute consultation</span>
@@ -442,12 +511,12 @@
         <label><input type="radio" name="topic" value="Investment & growth" /><span>Investment</span></label>
       </fieldset>
       <label><span>How can we help?</span><textarea name="message" rows="4" required></textarea></label>
-      <button type="submit" class="pbtn pbtn--dark">Send message</button>
+      <button type="submit" class="pbtn pbtn--light pbtn--sm sheet__send">Send message</button>
       <p class="form__note" role="status" aria-live="polite"></p>
     </form>
   </dialog>
 
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
-  <script src="script.js?v=94ac3a5" defer></script>
+  <script src="script.js?v=20261104o" defer></script>
 </body>
 </html>

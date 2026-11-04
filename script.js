@@ -143,7 +143,7 @@
     c.addEventListener('pointercancel', end);
   });
 
-  /* ---------- Solutions: scroll-driven tabs ---------- */
+  /* ---------- Solutions: stacking cards ---------- */
   const steps = $('.steps');
   const panels = $$('.panel');
   const words = $$('.word');
@@ -156,66 +156,61 @@
     panels.forEach((p, j) => { p.classList.toggle('is-active', j === i); if (j <= i) p.classList.add('is-seen'); });
     words.forEach((w, j) => { w.classList.toggle('is-active', j === i); w.setAttribute('aria-selected', String(j === i)); });
     descs.forEach((d, j) => d.classList.toggle('is-active', j === i));
-    if (steps) steps.style.setProperty('--acc', panels[i].style.getPropertyValue('--acc'));
+    if (steps) steps.closest('section').style.setProperty('--acc', panels[i].style.getPropertyValue('--acc'));
   };
-  // Deck: each card holds, then lifts off the top of the stack.
-  // Scroll units: card j lifts between j+HOLD and j+1; the last card stays.
-  const HOLD = 0.15;
-  const UNITS = () => panels.length - 1 + 0.4;
-  const ease = (t) => t * t * (3 - 2 * t);
-  const placeDeck = (seg) => {
-    let lifted = 0;
-    panels.forEach((_, j) => { if (j < panels.length - 1) lifted += ease(clamp((seg - j - HOLD) / (1 - HOLD))); });
-    panels.forEach((el, j) => {
-      const d = j - lifted;
-      el.style.zIndex = String(panels.length - j);
-      if (d >= 0) {
-        // waiting in the stack: smaller, its colored top edge peeking out above
-        const k = Math.min(d, 3);
-        el.style.transform = `translate3d(0, ${k * -22}px, 0) scale(${1 - k * 0.06})`;
-        el.style.opacity = String(d > 2 ? clamp(3 - d) : 1);
-        el.style.visibility = d > 3 ? 'hidden' : '';
-      } else {
-        // being taken off the top: slides out diagonally to the upper left, staying solid
-        const t = clamp(-d);
-        el.style.transform = `translate3d(${t * -110}%, ${t * -45}%, 0) rotate(${t * -14}deg)`;
-        el.style.opacity = String(clamp(1 - (t - 0.55) / 0.45));
-        el.style.visibility = t >= 1 ? 'hidden' : '';
+  // Stacking cards (What we do, Results). Desktop: the cards stick in the middle of the screen,
+  // level with the left column; each next card rises from below tilted back (like the works
+  // cards on restufiqih.com) and flattens as it lands. Phones: cards pile up, the one underneath dims.
+  const TILT = 26, RISE = 430;
+  const makeStack = (stage, cards) => {
+    const stick = () => parseFloat(getComputedStyle(cards[0]).top) || 0;
+    // Where card j sits before it sticks (sticky boxes report their stuck position, so add it up)
+    const restTop = (j) => {
+      const g = isDesk() ? parseFloat(getComputedStyle(stage).rowGap) || 0 : parseFloat(getComputedStyle(cards[0]).marginBottom) || 0;
+      return cards.slice(0, j).reduce((a, el) => a + el.offsetHeight + g, 0);
+    };
+    const place = () => {
+      if (!isDesk()) {
+        cards.forEach((el, j) => {
+          const next = cards[j + 1];
+          const cover = next ? clamp((el.getBoundingClientRect().top + el.offsetHeight - next.getBoundingClientRect().top) / el.offsetHeight) : 0;
+          el.style.transform = cover > 0 ? `scale(${(1 - cover * 0.07).toFixed(4)})` : '';
+          el.style.setProperty('--dim', (cover * 0.28).toFixed(3));
+        });
+        return -1;
       }
-    });
-    return Math.min(panels.length - 1, Math.round(lifted));
+      let cur = 0;
+      const st = stick();
+      // Work from layout positions, not the tilted boxes, so the last card lands flat
+      const sr = stage.getBoundingClientRect();
+      cards.forEach((el, j) => {
+        el.style.setProperty('--dim', '0');
+        const top = Math.min(Math.max(sr.top + restTop(j), st), sr.bottom - el.offsetHeight);
+        const t = j === 0 ? 0 : clamp((top - st) / RISE);
+        el.style.transform = t > 0 ? `perspective(1000px) rotateX(${(TILT * t).toFixed(2)}deg)` : '';
+        if (top <= st + 60) cur = j;
+      });
+      return cur;
+    };
+    const goTo = (j) => scrollToY(stage.getBoundingClientRect().top + window.scrollY + restTop(j) - stick() + 2);
+    return { place, goTo };
   };
-  // Phones: as the next card slides over, the one underneath shrinks and dims a little
-  const stackMobile = () => panels.forEach((el, j) => {
-    const next = panels[j + 1];
-    const cover = next ? clamp((el.getBoundingClientRect().top + el.offsetHeight - next.getBoundingClientRect().top) / el.offsetHeight) : 0;
-    el.style.transform = cover > 0 ? `scale(${(1 - cover * 0.07).toFixed(4)})` : '';
-    el.style.setProperty('--dim', (cover * 0.28).toFixed(3));
-  });
-  const clearDeck = () => panels.forEach((el) => { el.style.transform = el.style.opacity = el.style.zIndex = el.style.visibility = ''; });
+
+  // What we do: the cards pin just under the pinned title, so tell the CSS how tall the title is
+  const sol3 = $('.sol3'), sol3Head = $('.sol3__head');
+  const sizeSol3 = () => { if (sol3 && sol3Head) sol3.style.setProperty('--hh', `${sol3Head.offsetHeight}px`); };
+  sizeSol3();
+  window.addEventListener('resize', sizeSol3);
+  window.addEventListener('load', sizeSol3);
+  const solStack = steps ? makeStack($('.stage', steps), panels) : null;
   const updSteps = () => {
-    if (!steps) return;
-    if (!isDesk()) { clearDeck(); stackMobile(); panels.forEach((p) => p.classList.add('is-seen')); return; }
-    const dist = steps.offsetHeight - window.innerHeight;
-    const p = clamp(-steps.getBoundingClientRect().top / (dist || 1));
-    if (bar) bar.style.transform = `scaleX(${p})`;
-    deckTarget = p * UNITS();
-    if (deckCur === null) deckCur = deckTarget;
-    if (!deckRaf) deckRaf = requestAnimationFrame(tickDeck);
+    if (!solStack) return;
+    const cur = solStack.place();
+    if (cur < 0) { panels.forEach((p) => p.classList.add('is-seen')); return; }
+    setStep(cur);
   };
-  // The deck eases toward the scroll position, so the cards glide instead of stepping
-  let deckTarget = 0, deckCur = null, deckRaf = 0;
-  const tickDeck = () => {
-    deckCur += (deckTarget - deckCur) * (RM ? 1 : 0.09);
-    if (Math.abs(deckTarget - deckCur) < 0.0008) deckCur = deckTarget;
-    setStep(placeDeck(deckCur));
-    deckRaf = deckCur === deckTarget ? 0 : requestAnimationFrame(tickDeck);
-  };
-  words.forEach((w, j) => w.addEventListener('click', () => {
-    const dist = steps.offsetHeight - window.innerHeight;
-    const top = steps.getBoundingClientRect().top + window.scrollY;
-    scrollToY(top + dist * Math.min(1, (j + 0.15) / UNITS()));
-  }));
+  // Clicking a word scrolls to the moment its card lands on the stack
+  words.forEach((w, j) => w.addEventListener('click', () => solStack && solStack.goTo(j)));
 
   /* ---------- Parallax photos ---------- */
   const para = $$('[data-parallax]');
@@ -371,12 +366,11 @@
     });
   }
 
-  /* Custom cursor + photo preview for "What sets us apart" */
+  /* Photo preview that follows the pointer in "What sets us apart" (the custom cursor is off) */
   if (!RM && FINE) {
+    // The animated cursor ring is switched off; a detached stand-in keeps the photo preview code below working
     const cur = document.createElement('div');
-    cur.className = 'cursor is-hidden';
     cur.innerHTML = '<span class="cursor__ring"><em></em></span><span class="cursor__dot"></span>';
-    document.body.appendChild(cur);
     const ring = $('.cursor__ring', cur);
     const dot = $('.cursor__dot', cur);
     const label = $('em', cur);
@@ -648,7 +642,7 @@
   const tSec = $('.team'), tPin = $('.team__pin'), tRow = $('.people');
   if (tSec && tPin && tRow) {
     let tDist = 0;
-    const tOn = () => !isDesk() && !RM;
+    const tOn = () => false; // phones now swipe the team cards sideways instead of pinning the section
     const moveTeam = () => {
       if (!tOn()) return;
       const stickTop = parseFloat(getComputedStyle(tPin).top) || 0;
@@ -672,6 +666,29 @@
     window.addEventListener('resize', () => { if (window.innerWidth === tW) return; tW = window.innerWidth; sizeTeam(); });
     window.addEventListener('load', sizeTeam);
     sizeTeam();
+  }
+
+  /* Our team on phones: dots under the swipeable cards follow the card in view */
+  const pRow = $('.people');
+  if (pRow) {
+    const cards = [...pRow.querySelectorAll('.person')];
+    const dots = document.createElement('div');
+    dots.className = 'people__dots';
+    dots.setAttribute('aria-hidden', 'true');
+    cards.forEach((_, n) => { const d = document.createElement('span'); if (!n) d.className = 'is-on'; dots.appendChild(d); });
+    pRow.after(dots);
+    const ds = [...dots.children];
+    let raf = 0;
+    pRow.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const x = pRow.scrollLeft;
+        let best = 0;
+        cards.forEach((c, n) => { if (Math.abs(c.offsetLeft - pRow.offsetLeft - x) < Math.abs(cards[best].offsetLeft - pRow.offsetLeft - x)) best = n; });
+        if (x + pRow.clientWidth >= pRow.scrollWidth - 4) best = cards.length - 1;
+        ds.forEach((d, n) => d.classList.toggle('is-on', n === best));
+      });
+    }, { passive: true });
   }
 
   /* Footer line labels: each one types a short tagline, holds, erases, then the next */
@@ -726,27 +743,121 @@
   /* Why Saraya demos: tiles light up one at a time; the chat plays out while the column is on screen */
   const tilesEl = $('.wy__tiles');
   const chatEl = $('.wy__chat');
-  if (tilesEl && !RM) {
-    const tl = $$('li', tilesEl); let ti = 0, tTimer = 0;
+  if (tilesEl) {
+    const tl = $$('li', tilesEl); let ti = 0, tTimer = 0, seen = false;
+    const wrap = tilesEl.parentElement, pop = $('.wy__pop', wrap);
     const step = () => { tl.forEach((t, j) => t.classList.toggle('is-on', j === ti)); ti = (ti + 1) % tl.length; };
-    new IntersectionObserver((es) => es.forEach((e) => { clearInterval(tTimer); if (e.isIntersecting) { step(); tTimer = setInterval(step, 1400); } })).observe(tilesEl);
+    const runTiles = () => { clearInterval(tTimer); if (!RM && seen && pop.hidden) { step(); tTimer = setInterval(step, 2600); } };
+    new IntersectionObserver((es) => es.forEach((e) => { seen = e.isIntersecting; if (!seen) closePop(); runTiles(); })).observe(tilesEl);
+    // Clicking a tile opens a small card in the middle of the grid
+    let opener = null;
+    const closePop = () => {
+      if (pop.hidden) return;
+      pop.hidden = true; wrap.classList.remove('has-pop');
+      if (opener) { opener.focus({ preventScroll: true }); opener = null; }
+      runTiles();
+    };
+    tl.forEach((li, j) => $('button', li).addEventListener('click', (e) => {
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      if (!pop.hidden && opener === btn) { closePop(); return; }
+      clearInterval(tTimer);
+      opener = btn;
+      tl.forEach((t, k) => t.classList.toggle('is-on', k === j)); ti = (j + 1) % tl.length;
+      $('h4', pop).textContent = btn.textContent;
+      $('p', pop).textContent = btn.dataset.desc;
+      pop.hidden = true; void pop.offsetWidth; pop.hidden = false; // replay the pop-in
+      wrap.classList.add('has-pop');
+    }));
+    const popX = $('.wy__popx', pop);
+    if (popX) popX.addEventListener('click', closePop);
+    pop.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', closePop);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePop(); });
+  }
+
+  /* Why Saraya 01: the list drifts upward on its own and loops; it can also be scrolled by hand */
+  const wyList = $('.wy__list');
+  if (wyList) {
+    const track = $('.wy__track', wyList);
+    let pos = 0, lastSet = -1, hold = false, holdUntil = 0, listIn = false, lt = 0;
+    const half = () => track.scrollHeight / 2;
+    // keep a little room above, so scrolling up at the start also loops
+    const wrapPos = () => { const h = half(); if (h > 0) { while (pos >= h + 2) pos -= h; while (pos < 2) pos += h; } };
+    const SPEED = () => half() / 22000; // one full cycle every 22s, like before
+    const drift = (t) => {
+      const dt = lt ? Math.min(64, t - lt) : 16; lt = t;
+      if (listIn && !hold && performance.now() > holdUntil && !RM) pos += SPEED() * dt;
+      wrapPos();
+      if (Math.round(pos) !== lastSet) { lastSet = Math.round(pos); wyList.scrollTop = pos; }
+      requestAnimationFrame(drift);
+    };
+    // Manual scrolling: follow the user, keep looping, and wait a moment before drifting again
+    wyList.addEventListener('scroll', () => {
+      if (Math.abs(wyList.scrollTop - lastSet) <= 1) return;
+      pos = wyList.scrollTop; wrapPos();
+      if (Math.round(pos) !== wyList.scrollTop) { lastSet = Math.round(pos); wyList.scrollTop = pos; } else lastSet = wyList.scrollTop;
+      holdUntil = performance.now() + 1500;
+    }, { passive: true });
+    wyList.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hold = true; });
+    wyList.addEventListener('pointerleave', () => { hold = false; });
+    wyList.addEventListener('touchstart', () => { holdUntil = performance.now() + 2500; }, { passive: true });
+    new IntersectionObserver(([en]) => { listIn = en.isIntersecting; }).observe(wyList);
+    requestAnimationFrame(drift);
   }
   if (chatEl) {
-    const [bIn, bTyp, bOut] = $$('.bub', chatEl);
-    if (RM) { [bIn, bOut].forEach((b) => b.classList.add('is-on')); }
+    // A short conversation plays out: questions come in, a typing indicator shows before each answer,
+    // new bubbles enter at the bottom and push the older ones up. It loops while the column is on screen.
+    const msgs = $$('.bub:not(.bub--typing)', chatEl);
+    const typing = $('.bub--typing', chatEl);
+    if (RM) { msgs.forEach((m) => m.classList.add('is-on')); typing.hidden = true; }
     else {
       let timers = [];
+      const at = (ms, fn) => timers.push(setTimeout(fn, ms));
       const clear = () => { timers.forEach(clearTimeout); timers = []; };
+      // Clear instantly: no collapsing or sliding, the bubbles are simply gone before the next round
+      const reset = () => {
+        chatEl.classList.add('no-anim');
+        msgs.forEach((m) => m.classList.toggle('is-on', false));
+        typing.classList.toggle('is-on', false);
+        void chatEl.offsetHeight;
+        chatEl.classList.remove('no-anim', 'is-fading');
+      };
+      // The reply starts exactly where the typing bubble is, at its height, then grows and fades in
+      const swapIn = (m) => {
+        const h = typing.offsetHeight;
+        typing.style.transition = 'none';
+        typing.classList.toggle('is-on', false);
+        m.style.transition = 'none';
+        m.style.maxHeight = `${h}px`;
+        m.style.marginTop = '10px';
+        m.style.opacity = '0';
+        m.style.transform = 'none';
+        void m.offsetHeight;
+        m.style.transition = m.style.maxHeight = m.style.marginTop = m.style.opacity = m.style.transform = '';
+        m.classList.add('is-on');
+        requestAnimationFrame(() => { typing.style.transition = ''; });
+      };
       const play = () => {
         clear();
-        timers.push(setTimeout(() => bIn.classList.add('is-on'), 300));
-        timers.push(setTimeout(() => bTyp.classList.add('is-on'), 1500));
-        timers.push(setTimeout(() => { bTyp.classList.remove('is-on'); bOut.classList.add('is-on'); }, 3300));
-        // fade everything out together, then start over
-        timers.push(setTimeout(() => [bIn, bTyp, bOut].forEach((b) => b.classList.remove('is-on')), 8600));
-        timers.push(setTimeout(play, 9600));
+        let t = 300;
+        msgs.forEach((m) => {
+          if (m.classList.contains('bub--out')) {
+            // move the typing bubble into place first, then show it on the next frame so it grows in smoothly
+            at(t, () => { chatEl.insertBefore(typing, m); void typing.offsetHeight; requestAnimationFrame(() => typing.classList.add('is-on')); });
+            t += 2200;
+            at(t, () => swapIn(m));
+          } else {
+            at(t, () => m.classList.add('is-on'));
+          }
+          t += 1800;
+        });
+        // hold the full conversation, fade it out in place (opacity only), clear it, then start over
+        at(t + 3200, () => chatEl.classList.add('is-fading'));
+        at(t + 3900, reset);
+        at(t + 4300, play);
       };
-      new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) play(); else clear(); }), { threshold: 0.4 }).observe(chatEl);
+      new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) play(); else { clear(); reset(); } }), { threshold: 0.4 }).observe(chatEl);
     }
   }
 
@@ -788,6 +899,41 @@
     v.addEventListener('focus', () => setVal(v));
     v.addEventListener('click', () => setVal(v));
   });
+
+  /* ---------- How we work (changelog style): the timeline item nearest the middle lights up together with its node in the illustration ---------- */
+  const clSec = $('.clog');
+  if (clSec) {
+    const clItems = $$('.cl__item');
+    let clCur = -1;
+    const updCl = () => {
+      const mid = window.innerHeight * 0.55;
+      let cur = 0;
+      clItems.forEach((it, i) => { if (it.getBoundingClientRect().top < mid) cur = i; });
+      if (cur === clCur) return;
+      clCur = cur;
+      clItems.forEach((it, i) => { it.classList.toggle('is-on', i === cur); it.classList.toggle('is-done', i < cur); });
+    };
+    window.addEventListener('scroll', updCl, { passive: true });
+    updCl();
+    // The timeline line runs from the centre of the first dot to the centre of the last one
+    const clTrack = $('.cl__track', clSec), clDots = $$('.cl__dot', clSec);
+    const sizeTrack = () => {
+      if (!clTrack || clDots.length < 2) return;
+      // layout offsets, so the opening animation (which shifts items while they fade in) cannot skew it
+      const centre = (d) => d.parentElement.offsetTop + d.offsetTop + d.offsetHeight / 2;
+      const first = centre(clDots[0]), last = centre(clDots[clDots.length - 1]);
+      clTrack.style.setProperty('--t0', `${first}px`);
+      clTrack.style.setProperty('--th', `${last - first}px`);
+      // desktop lays the stages side by side: the same line then runs across, from the first dot to the last
+      const centreX = (d) => d.parentElement.offsetLeft + d.offsetLeft + d.offsetWidth / 2;
+      const x0 = centreX(clDots[0]), x1 = centreX(clDots[clDots.length - 1]);
+      clTrack.style.setProperty('--l0', `${x0}px`);
+      clTrack.style.setProperty('--lw', `${x1 - x0}px`);
+    };
+    sizeTrack();
+    window.addEventListener('resize', sizeTrack);
+    window.addEventListener('load', sizeTrack);
+  }
 
   /* ---------- How we work: line fills and steps light up on scroll ---------- */
   const flow = $('.flow');
@@ -872,16 +1018,40 @@
     });
   });
 
-  /* ---------- Magnetic buttons ---------- */
-  if (!RM && FINE) {
-    $$('.pbtn, .round').forEach((el) => {
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        el.style.transform = `translate(${((e.clientX - r.left - r.width / 2) * 0.2).toFixed(1)}px, ${((e.clientY - r.top - r.height / 2) * 0.3).toFixed(1)}px)`;
-      });
-      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  /* Testimonials on phones: a sliding track, one quote wide. Every 4.5s the whole row moves left by one quote.
+     A copy of the first quote sits at the end, so the loop keeps sliding left and then jumps back unseen. */
+  const tstGrid = document.querySelector('.tst__grid');
+  if (tstGrid) {
+    const items = [...tstGrid.querySelectorAll('.tst__item')];
+    const clone = items[0].cloneNode(true);
+    clone.classList.add('tst__clone');
+    clone.setAttribute('aria-hidden', 'true');
+    tstGrid.appendChild(clone);
+    let tstIdx = 0, tstSeen = false;
+    const all = [...items, clone];
+    const place = (n, animate) => {
+      tstGrid.classList.toggle('no-anim', !animate);
+      tstGrid.style.setProperty('--ti', n);
+      all.forEach((it, k) => it.classList.toggle('is-cur', k === n));   // only the quote in view is visible
+    };
+    place(0, false);
+    requestAnimationFrame(() => tstGrid.classList.remove('no-anim'));
+    tstGrid.addEventListener('transitionend', (e) => {
+      if (e.propertyName !== 'transform' || tstIdx !== items.length) return;
+      tstIdx = 0;
+      place(0, false);           // jump from the copy back to the real first quote
+      void tstGrid.offsetWidth;
+      tstGrid.classList.remove('no-anim');
     });
+    new IntersectionObserver((es) => { tstSeen = es[0].isIntersecting; }, { threshold: 0.4 }).observe(tstGrid);
+    if (!RM && items.length > 1) setInterval(() => {
+      if (isDesk() || !tstSeen || document.hidden) return;
+      tstIdx += 1;
+      place(tstIdx, true);
+    }, 4500);
   }
+
+  /* Buttons stay still on hover: no magnetic pull toward the cursor */
 
   /* ---------- Reveal on scroll ---------- */
   const io = new IntersectionObserver((es, obs) => es.forEach((e) => {
@@ -893,6 +1063,27 @@
     obs.unobserve(el);
   }), { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
   $$('.reveal').forEach((el) => io.observe(el));
+
+  // Opening animation for the pieces inside every section: each component rises in as it reaches the
+  // screen, one after another within its group. It animates `translate` and opacity only, so it never
+  // fights the transforms other effects use (tilting cards, sliding tracks, sticky stacks).
+  if (!RM) {
+    const IO_SEL = [
+      '.clients .cl', '.sol3 .tab2', '.sol3 .panel', '.wy__demo', '.wy h3', '.wy > p', '.wy__ic',
+      '.cl__item', '.res3__stat', '.vmc__list li', '.pc--nums > div',
+      '.feature__logos li', '.person__img', '.person h3', '.qa', '.foot__cols > div', '.foot__brand',
+    ].join(',');
+    const parts = $$(IO_SEL).filter((el) => !el.classList.contains('reveal') && !el.closest('.hero'));
+    const io2 = new IntersectionObserver((es, obs) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const group = [...el.parentElement.children].filter((c) => c.classList.contains('io'));
+      el.style.setProperty('--io-d', `${Math.min(Math.max(0, group.indexOf(el)), 6) * 90}ms`);
+      el.classList.add('io-in');
+      obs.unobserve(el);
+    }), { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+    parts.forEach((el) => { el.classList.add('io'); io2.observe(el); });
+  }
 
   /* ---------- Consultation sheet + form ---------- */
   const sheet = $('#consult');
